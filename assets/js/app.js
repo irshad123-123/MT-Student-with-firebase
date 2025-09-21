@@ -44,7 +44,6 @@ const studentTemplating = (arr) =>{
                             <td class="text-center"><i onclick ="onRemove(this)" class="fa-solid fa-trash text-danger fa-2x" role="button"></i>
                             </td>
                             </tr>`
-     localStorage.setItem('i', i)
     })
     studentContainer.innerHTML = result;
 }
@@ -65,14 +64,16 @@ const onEdit = async (ele)=>{
     updateStudent.classList.remove('d-none')
 
     studentForm.scrollIntoView({behavior:'smooth', block:'center'})
-    snackBar('The data is patch successfully!!!', 'success')
+    snackBar('The data is patch successfully!!!', 'info')
 }
 
 const onRemove = async(ele) =>{
   let re = await  Swal.fire({
   title: "Do you want to remove this student details?",
   showCancelButton: true,
-  confirmButtonText: "No",
+  confirmButtonText: "Yes",
+cancelButtonText: "No",
+
 }).then((result) => {
   /* Read more about isConfirmed, isDenied below */
   if (result.isConfirmed) {
@@ -134,9 +135,10 @@ const onSubmitStudent = async (eve) =>{
     let res = await makeApiCall('POST', STUDENT_URL, obj)
     studentForm.reset()
     let tr = document.createElement('tr')
-    tr.id = res.id;
-    let i = localStorage.getItem('i')
-    tr.innerHTML = `        <td>${i}</td>
+    tr.id = res.name;
+    let rowCount = studentContainer.querySelectorAll('tr').length;
+
+    tr.innerHTML = `        <td>${rowCount+1}</td>
                             <td>${obj.fname}</td>
                             <td>${obj.lname}</td>
                             <td>${obj.email}</td>
